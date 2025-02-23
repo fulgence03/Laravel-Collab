@@ -101,20 +101,20 @@ class ProjetController extends Controller
 
     // Récupérer l'utilisateur à ajouter
     $user = User::where('email', $request->email)->first();
-    if(!$user){
-        return redirect()->back()->with('addUserError', 'Utilisateur introuvable.');
-    }
-    // Vérifier si l'utilisateur est déjà dans le projet
-    if ($projet->users()->where('user_id', $user->id)->exists()) {
-        return redirect()->back()->with('addUserError', 'Ce participant fait déjà partie du projet.');
-    }
+if(!$user){
+    return redirect()->back()->with('addUserError', 'Utilisateur introuvable.');
+}
+// Vérifier si l'utilisateur est déjà dans le projet
+if ($projet->users()->where('user_id', $user->id)->exists()) {
+    return redirect()->back()->with('addUserError', 'Ce participant fait déjà partie du projet.');
+}
 
-    // Ajouter l'utilisateur au projet avec le rôle sélectionné
-    $projet->users()->attach($user->id, ['role' => $request->role]);
-    Mail::to($user->email)->send(new AjoutMembreMail($projet->first(), $user, $request->user()));
+// Ajouter l'utilisateur au projet avec le rôle sélectionné
+$projet->users()->attach($user->id, ['role' => $request->role]);
+Mail::to($user->email)->send(new AjoutMembreMail($projet->first(), $user, $request->user()));
 
 
-    return redirect()->back()->with('addUserSuccess', 'Participant ajouté avec succès au projet.');
+return redirect()->back()->with('addUserSuccess', 'Participant ajouté avec succès au projet.');
 }
 public function updateMemberRole(Request $request, $id)
 {
