@@ -6,7 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use App\Models\Projet;
+use App\Models\Tache;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -44,5 +45,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the projects associated with the user.
+     */
+    public function projets()    
+    {
+        return $this->belongsToMany(Projet::class)->withPivot('role');
+    }   
+    public function taches()
+    {
+        return $this->belongsToMany(Tache::class);
     }
 }
